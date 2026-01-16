@@ -1,7 +1,5 @@
 package testmouse;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
@@ -22,27 +20,28 @@ public class Main {
         WebDriver driver = new ChromeDriver();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        driver.get("https://the-internet.herokuapp.com/add_remove_elements/");
+        driver.get("https://the-internet.herokuapp.com/login");
 
-        WebElement addBtn = wait.until(
-            ExpectedConditions.elementToBeClickable(
-                By.xpath("//button[text()='Add Element']")
-            )
+        // Enter username
+        WebElement username = wait.until(
+            ExpectedConditions.visibilityOfElementLocated(By.id("username"))
+        );
+        username.sendKeys("tomsmith");
+
+        // Enter password
+        WebElement password = driver.findElement(By.id("password"));
+        password.sendKeys("SuperSecretPassword!");
+
+        // Click login
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+
+        // Verify login success
+        WebElement success = wait.until(
+            ExpectedConditions.visibilityOfElementLocated(By.id("flash"))
         );
 
-        addBtn.click();
+        System.out.println(success.getText());
 
-        // Add Robot code here
-        try {
-            Robot robot = new Robot();
-            robot.delay(1000);
-            robot.keyPress(KeyEvent.VK_ENTER);
-            robot.keyRelease(KeyEvent.VK_ENTER);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try { Thread.sleep(3000); } catch (Exception ignored) {}
         driver.quit();
     }
 }
