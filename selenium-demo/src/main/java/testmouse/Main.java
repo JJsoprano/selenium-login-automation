@@ -11,37 +11,37 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Main {
     public static void main(String[] args) {
+        final String chromeDriverPath = "C:\\drivers\\chromedriver-win64\\chromedriver.exe";
+        final String url = "https://the-internet.herokuapp.com/login";
+        final String username = "tomsmith";
+        final String password = "SuperSecretPassword!";
 
-        System.setProperty(
-            "webdriver.chrome.driver",
-            "C:\\drivers\\chromedriver-win64\\chromedriver.exe"
-        );
+        System.setProperty("webdriver.chrome.driver", chromeDriverPath);
 
-        WebDriver driver = new ChromeDriver();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        try (WebDriver driver = new ChromeDriver()) {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        driver.get("https://the-internet.herokuapp.com/login");
+            driver.get(url);
 
-        // Enter username
-        WebElement username = wait.until(
-            ExpectedConditions.visibilityOfElementLocated(By.id("username"))
-        );
-        username.sendKeys("tomsmith");
+            // Enter username
+            WebElement usernameElement = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.id("username"))
+            );
+            usernameElement.sendKeys(username);
 
-        // Enter password
-        WebElement password = driver.findElement(By.id("password"));
-        password.sendKeys("SuperSecretPassword!");
+            // Enter password
+            WebElement passwordElement = driver.findElement(By.id("password"));
+            passwordElement.sendKeys(password);
 
-        // Click login
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
+            // Click login
+            driver.findElement(By.cssSelector("button[type='submit']")).click();
 
-        // Verify login success
-        WebElement success = wait.until(
-            ExpectedConditions.visibilityOfElementLocated(By.id("flash"))
-        );
+            // Verify login success
+            WebElement successElement = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.id("flash"))
+            );
 
-        System.out.println(success.getText());
-
-        driver.quit();
+            System.out.println(successElement.getText());
+        }
     }
 }
