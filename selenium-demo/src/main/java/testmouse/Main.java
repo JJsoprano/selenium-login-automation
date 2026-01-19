@@ -18,7 +18,8 @@ public class Main {
 
         System.setProperty("webdriver.chrome.driver", chromeDriverPath);
 
-        try (WebDriver driver = new ChromeDriver()) {
+        WebDriver driver = new ChromeDriver();
+        try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
             driver.get(url);
@@ -42,6 +43,8 @@ public class Main {
             );
 
             System.out.println(successElement.getText());
+        } finally {
+            driver.quit();
         }
     }
 }

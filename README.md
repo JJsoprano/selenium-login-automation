@@ -1,27 +1,21 @@
-# Selenium Demo
+# Selenium Login Automation (Java)
 
-A simple Selenium WebDriver automation project that demonstrates automated login testing.
+This project demonstrates **automated login testing** using **Java, Selenium WebDriver, JUnit 5**, and the **Robot class**.  
+It follows the **Page Object Model (POM)** design pattern and is structured as a **Maven project**.
 
-## Description
+---
 
-This project uses Selenium WebDriver with Java to automate a login test on [The Internet](https://the-internet.herokuapp.com/login) demo website.
+## 🚀 Tech Stack
 
-## Features
-
-- Automated web browser control using Selenium WebDriver
-- Explicit waits for better reliability
-- Login form automation
-- Success message verification
-
-## Prerequisites
-
-- Java 8 or higher
+- Java 17
+- Selenium WebDriver
+- ChromeDriver
+- JUnit 5
 - Maven
-- ChromeDriver (download from [ChromeDriver Downloads](https://chromedriver.chromium.org/downloads))
+- Java Robot Class
+- VS Code
 
-## Setup
+---
 
-1. Clone this repository
-2. Download ChromeDriver and update the path in `Main.java`:
-   ```java
-   System.setProperty("webdriver.chrome.driver", "YOUR_PATH_TO_CHROMEDRIVER");
+## 📂 Project Structure
+
