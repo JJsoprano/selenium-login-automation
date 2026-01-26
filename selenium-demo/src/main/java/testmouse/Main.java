@@ -10,6 +10,17 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Main {
+
+    /**
+     * Main entry point for the application.
+     * 
+     * This program automates a login test on The Internet demo website using Selenium WebDriver.
+     * It uses ChromeDriver and sets up the browser to maximize the window.
+     * It then navigates to the login page, enters a username and password, clicks the login button, and verifies the success message.
+     * Finally, it prints the success message to the console and quits the browser.
+     * 
+     * @param args Command line arguments
+     */
     public static void main(String[] args) {
         final String chromeDriverPath = "C:\\drivers\\chromedriver-win64\\chromedriver.exe";
         final String url = "https://the-internet.herokuapp.com/login";

@@ -1,24 +1,30 @@
 package tests;
 
+import java.time.Duration;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import pages.LoginPage;
-
-import java.awt.Robot;
-import java.awt.event.KeyEvent;
 
 public class LoginTest {
 
     private WebDriver driver;
     private LoginPage loginPage;
 
-    @BeforeEach
+
+/*************  ✨ Windsurf Command ⭐  *************/
+    /**
+     * Set up the test environment by creating a new ChromeDriver instance, maximizing the window, navigate to the login page, and create a new LoginPage instance.
+     * This method is called before each test.
+     */
+/*******  5b09f901-351a-4772-b7e4-604ece38c4dd  *******/    @BeforeEach
     void setUp() {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
@@ -29,21 +35,13 @@ public class LoginTest {
 
     @Test
     void validLoginShouldSucceed() throws Exception {
-        // Use Selenium for username
-        loginPage.enterUsername("tomsmith");
+        loginPage.enterUsername("tomsmith")
+                 .enterPassword("SuperSecretPassword!")
+                 .clickLogin();
 
-        // Use Robot for password typing
-        Robot robot = new Robot();
-        robot.delay(500);
-
-        for (char c : "SuperSecretPassword!".toCharArray()) {
-            robot.keyPress(KeyEvent.getExtendedKeyCodeForChar(c));
-            robot.keyRelease(KeyEvent.getExtendedKeyCodeForChar(c));
-        }
-
-        robot.delay(300);
-        robot.keyPress(KeyEvent.VK_ENTER);
-        robot.keyRelease(KeyEvent.VK_ENTER);
+        // Wait for redirect to complete
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.urlContains("/secure"));
 
         // Assertion: URL contains /secure
         Assertions.assertTrue(
