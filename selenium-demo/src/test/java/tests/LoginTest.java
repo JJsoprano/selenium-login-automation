@@ -1,65 +1,60 @@
 package tests;
 
-import java.time.Duration;
-
-import org.junit.jupiter.api.AfterEach;
+import base.BaseTest;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
 import pages.LoginPage;
 
-public class LoginTest {
+public class LoginTest extends BaseTest {
 
-    private WebDriver driver;
-    private LoginPage loginPage;
-
-
-/*************  ✨ Windsurf Command ⭐  *************/
     /**
-     * Set up the test environment by creating a new ChromeDriver instance, maximizing the window, navigate to the login page, and create a new LoginPage instance.
-     * This method is called before each test.
+     * Test that a valid login attempt results in a successful login.
+     * 
+     * This test enters valid credentials on the login page, clicks the login button, and verifies that the user is redirected to the secure page.
+     * 
+     * @see #enterUsername(String)
+     * @see #enterPassword(String)
+     * @see #clickLogin()
+     * @see #isLoginSuccessful()
      */
-/*******  5b09f901-351a-4772-b7e4-604ece38c4dd  *******/    @BeforeEach
-    void setUp() {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.get("https://the-internet.herokuapp.com/login");
-
-        loginPage = new LoginPage(driver);
-    }
-
     @Test
-    void validLoginShouldSucceed() throws Exception {
-        loginPage.enterUsername("tomsmith")
-                 .enterPassword("SuperSecretPassword!")
-                 .clickLogin();
+    public void testValidLogin() {
 
-        // Wait for redirect to complete
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.urlContains("/secure"));
+        LoginPage loginPage = new LoginPage(driver);
 
-        // Assertion: URL contains /secure
+        // Valid credentials for demo site
+        loginPage.enterUsername("tomsmith");
+        loginPage.enterPassword("SuperSecretPassword!");
+        loginPage.clickLogin();
+
         Assertions.assertTrue(
-                driver.getCurrentUrl().contains("/secure"),
-                "User was not redirected to secure page"
-        );
-
-        // Assertion: success message visible
-        Assertions.assertTrue(
-                loginPage.getSuccessMessage().contains("You logged into a secure area"),
-                "Login success message not found"
+                loginPage.isLoginSuccessful(),
+                "Login failed: User was not redirected to secure page"
         );
     }
 
-    @AfterEach
-    void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
+    /**
+     * Test that an invalid login attempt results in an error message being displayed.
+     * 
+     * This test enters invalid credentials on the login page, clicks the login button, and verifies that an error message is displayed.
+     * 
+     * @see #enterUsername(String)
+     * @see #enterPassword(String)
+     * @see #clickLogin()
+     * @see #isErrorDisplayed()
+     */
+    @Test
+    public void testInvalidLogin() {
+
+        LoginPage loginPage = new LoginPage(driver);
+
+        loginPage.enterUsername("wronguser");
+        loginPage.enterPassword("wrongpass");
+        loginPage.clickLogin();
+
+        Assertions.assertTrue(
+                loginPage.isErrorDisplayed(),
+                "Error message not displayed for invalid login"
+        );
     }
 }

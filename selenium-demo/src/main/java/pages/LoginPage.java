@@ -1,71 +1,80 @@
 package pages;
 
-import java.time.Duration;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginPage {
 
-    private WebDriver driver;
-    private WebDriverWait wait;
-    private By successMessage = By.id("flash");
+    WebDriver driver;
 
+    // Locators for demo site
+    By username = By.id("username");
+    By password = By.id("password");
+    By loginButton = By.cssSelector("button[type='submit']");
+    By successMessage = By.id("flash");
+    By errorMessage = By.id("flash");
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    private By username = By.id("username");
-    private By password = By.id("password");
-    private By loginBtn = By.cssSelector("button[type='submit']");
-
     /**
-     * Enter the username for the login form.
+     * Enter a username into the username field on the login page.
      * 
-     * Waits for the username input field to be visible, then enters the given username into the field.
-     * 
-     * @param user The username to enter into the login form.
+     * @param user The username to enter
      */
-    public LoginPage enterUsername(String user) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(username))
-            .sendKeys(user);
-        return this;
+    public void enterUsername(String user) {
+        driver.findElement(username).clear();
+        driver.findElement(username).sendKeys(user);
     }
 
     /**
-     * Enter the password for the login form.
+     * Enter a password into the password field on the login page.
      * 
-     * Waits for the password input field to be visible, then enters the given password into the field.
-     * 
-     * @param pass The password to enter into the login form.
+     * @param pass The password to enter
      */
-    public LoginPage enterPassword(String pass) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(password))
-            .sendKeys(pass);
-        return this;
+    public void enterPassword(String pass) {
+        driver.findElement(password).clear();
+        driver.findElement(password).sendKeys(pass);
     }
 
     /**
-     * Click the login button.
+     * Click the login button on the login page.
      * 
-     * Waits for the login button to be clickable, then clicks it.
+     * This method clicks the login button, which will attempt to log in with the entered username and password.
      */
-    public LoginPage clickLogin() {
-        wait.until(ExpectedConditions.elementToBeClickable(loginBtn)).click();
-        return this;
+    public void clickLogin() {
+        driver.findElement(loginButton).click();
     }
-    /**
- * Get the success message text after login.
- *
- * @return success message text
- */
-public String getSuccessMessage() {
-    return wait.until(ExpectedConditions.visibilityOfElementLocated(successMessage))
-               .getText();
-}
 
+    /**
+     * Check if the login was successful by verifying if the current URL contains "/secure"
+     * 
+     * @return true if the login was successful, false otherwise
+     */
+    public boolean isLoginSuccessful() {
+        return driver.getCurrentUrl().contains("/secure");
+    }
+
+    /**
+     * Check if an error message is displayed on the login page.
+     * 
+     * This method checks if an error message is displayed on the login page, which will be visible if the login attempt was unsuccessful.
+     * 
+     * @return true if an error message is displayed, false otherwise
+     */
+    public boolean isErrorDisplayed() {
+        return driver.findElement(errorMessage).isDisplayed();
+    }
+
+    /**
+     * Retrieve the text of the success message after a successful login.
+     * 
+     * This method retrieves the text of the success message that is displayed after a successful login.
+     * 
+     * @return The text of the success message
+     */
+    public String getMessageText() {
+        return driver.findElement(successMessage).getText();
+    }
 }
